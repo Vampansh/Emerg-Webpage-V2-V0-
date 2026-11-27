@@ -86,7 +86,7 @@
     el.classList.add('split-ready');
   }
 
-  const headlines = document.querySelectorAll('.hero-headline, .section-title');
+  const headlines = document.querySelectorAll('.hero-headline, .section-title, .contact-intro');
   const headlineObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
