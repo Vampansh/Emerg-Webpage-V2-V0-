@@ -1,0 +1,52 @@
+/* ==========================================================================
+   EMERG Official Typography & Font Stylesheet
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* Brand Typography Tokens */
+  --font-emerg-display: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-emerg-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-emerg-mono: 'JetBrains Mono', monospace;
+
+  /* Official Brand Colors (Extracted from Transparent Master) */
+  --color-emerg-dark: #3D2C2E;
+  --color-emerg-lilac: #D1CCDC;
+  --color-emerg-slate: #886F68;
+  --color-emerg-white: #FFFFFF;
+
+  /* Letter Spacing */
+  --tracking-wordmark: 0.16em;
+  --tracking-tight: -0.02em;
+  --tracking-wide: 0.04em;
+}
+
+/* Global Type Styles */
+body {
+  font-family: var(--font-emerg-body);
+  color: var(--color-emerg-dark);
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-emerg-display);
+  color: var(--color-emerg-dark);
+  line-height: 1.2;
+}
+
+/* Wordmark & Tagline Classes */
+.emerg-wordmark {
+  font-family: var(--font-emerg-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wordmark);
+  color: var(--color-emerg-dark);
+}
+
+.emerg-tagline {
+  font-family: var(--font-emerg-body);
+  font-weight: 500;
+  color: var(--color-emerg-slate);
+  letter-spacing: var(--tracking-wide);
+}

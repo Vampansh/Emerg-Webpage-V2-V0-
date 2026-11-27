@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EMERG — Official Brand Identity Showcase</title>
+  <link rel="stylesheet" href="../fonts-kit/typography.css">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      background: #F8F7FA;
+      margin: 0;
+      padding: 40px 20px;
+      font-family: var(--font-emerg-body);
+      color: #3D2C2E;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .header h1 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+    .header p {
+      color: #886F68;
+      font-size: 16px;
+      margin: 0;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .card {
+      background: #FFFFFF;
+      border: 1px solid #E8E5EC;
+      border-radius: 16px;
+      padding: 36px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(61, 44, 46, 0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .card.dark {
+      background: #1E1724;
+      border-color: #2D2336;
+      color: #FFFFFF;
+    }
+    .card img {
+      max-width: 240px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+    .card-label {
+      font-family: var(--font-emerg-mono);
+      font-size: 12px;
+      color: #886F68;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .card.dark .card-label {
+      color: #D1CCDC;
+    }
+    .full-width-card {
+      background: #FFFFFF;
+      border: 1px solid #E8E5EC;
+      border-radius: 16px;
+      padding: 36px;
+      margin-bottom: 32px;
+    }
+    .nav-mockup {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #FFFFFF;
+      padding: 16px 24px;
+      border: 1px solid #E8E5EC;
+      border-radius: 12px;
+      margin-top: 16px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav-logo img {
+      height: 36px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #886F68;
+    }
+    .nav-btn {
+      background: #3D2C2E;
+      color: #FFFFFF;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>EMERG — Brand Identity Suite</h1>
+      <p>Official vector masters and hi-res deliverables (Built directly from authentic transparent master)</p>
+    </div>
+
+    <!-- Section 1: Light vs Dark -->
+    <div class="card-grid">
+      <div class="card">
+        <img src="../png-high-res/emerg-logo-1024.png" alt="EMERG Official Logo Full">
+        <div class="card-label">Primary Master on Light · emerg-logo-4k.png</div>
+      </div>
+      <div class="card dark">
+        <img src="../png-high-res/emerg-logo-white-1024.png" alt="EMERG Official Logo White">
+        <div class="card-label">Reversed Master on Dark · emerg-logo-white-2k.png</div>
+      </div>
+    </div>
+
+    <!-- Section 2: Symbol vs Wordmark -->
+    <div class="card-grid">
+      <div class="card">
+        <img src="../png-high-res/emerg-symbol-512.png" alt="EMERG Symbol Mark" style="max-width: 140px;">
+        <div class="card-label">Standalone Symbol Mark · emerg-symbol-2k.png</div>
+      </div>
+      <div class="card">
+        <img src="../png-high-res/emerg-app-icon-512.png" alt="EMERG App Icon" style="max-width: 140px;">
+        <div class="card-label">Squircle App Icon · emerg-app-icon-512.png</div>
+      </div>
+    </div>
+
+    <!-- Section 3: Navigation Context -->
+    <div class="full-width-card">
+      <div style="font-weight: 700; font-size: 16px; margin-bottom: 6px;">Website Navigation Bar Context</div>
+      <div style="color: #886F68; font-size: 14px;">How the logo integrates into digital products and cloud dashboards:</div>
+      <div class="nav-mockup">
+        <div class="nav-logo">
+          <img src="../png-high-res/emerg-symbol-512.png" alt="Icon">
+          <div class="emerg-wordmark" style="font-size: 18px;">EMERG</div>
+        </div>
+        <div class="nav-links">
+          <span>Platform</span>
+          <span>Solutions</span>
+          <span>Enterprise</span>
+          <span>Docs</span>
+        </div>
+        <a href="#" class="nav-btn">Get Started</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
