@@ -314,9 +314,71 @@ footer::before {
 
 .scroll-to-top { transition: opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo), background-color 0.3s ease; }
 
+/* ---------- Hero kicker (replaces stacked pills) ---------- */
+.hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 28px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.hero-kicker-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-primary) 22%, transparent);
+  animation: kicker-pulse 2.4s ease-in-out infinite;
+}
+@keyframes kicker-pulse {
+  50% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent-primary) 0%, transparent); }
+}
+
+/* ---------- Form details ---------- */
+.form-honeypot {
+  position: absolute !important;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.form-consent {
+  margin-top: 14px;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--text-muted, var(--text-secondary));
+  text-align: center;
+}
+.form-consent a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- Accessibility & focus ---------- */
+:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+img { max-width: 100%; height: auto; }
+
 /* ---------- Mobile ---------- */
 @media (max-width: 768px) {
   #hero { padding-top: 112px; }
+  .hero-content { text-align: left; align-items: flex-start; }
+  .hero-headline { font-size: clamp(2.25rem, 10.5vw, 3rem); }
+  .hero-subheadline { margin-left: 0; margin-right: 0; font-size: 1rem; }
+  .hero-ctas { flex-direction: column; align-items: stretch; width: 100%; gap: 12px; }
+  .hero-ctas .btn { width: 100%; justify-content: center; min-height: 52px; }
+  .hero-kicker { margin-bottom: 20px; font-size: 0.72rem; }
+  .section-title { font-size: clamp(1.9rem, 8.4vw, 2.5rem); }
+  .section-pad { padding: 72px 0; }
+  .nav-link, .footer-legal a, .footer-links a, .filter-btn { min-height: 44px; display: inline-flex; align-items: center; }
+  .form-group input,
+  .form-group select,
+  .form-group textarea { font-size: 16px; }
+  .footer-legal { flex-wrap: wrap; gap: 4px 18px; }
+  .scroll-to-top { bottom: calc(20px + env(safe-area-inset-bottom)); }
   .nav-inner { height: 64px; }
   #navbar.scrolled .nav-inner { height: 58px; }
   .reveal { filter: none; transform: translate3d(0, 24px, 0); }

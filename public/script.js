@@ -361,6 +361,9 @@ if (contactForm) {
 contactForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
+  const honeypot = contactForm.querySelector('input[name="_honey"]');
+  if (honeypot && honeypot.value) return;
+
   if (!validateAll()) {
     // Focus first error
     const firstError = contactForm.querySelector('.form-group.error input, .form-group.error select, .form-group.error textarea');
@@ -398,7 +401,12 @@ contactForm.addEventListener('submit', async (e) => {
     _template: 'table',
     _captcha:  'false',
     _replyto:  fields.email.el.value.trim(),
+    _honey:    '',
+    page:      window.location.href,
   };
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
 
   try {
     const response = await fetch('https://formsubmit.co/ajax/hello@emerg.co.in', {
@@ -407,10 +415,11 @@ contactForm.addEventListener('submit', async (e) => {
         'Content-Type': 'application/json',
         'Accept':        'application/json'
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      signal: controller.signal,
     });
 
-    const result = await response.json();
+    const result = await response.json().catch(() => ({}));
 
     if (response.ok && (result.success === 'true' || result.success === true)) {
       contactForm.style.display = 'none';
@@ -421,6 +430,7 @@ contactForm.addEventListener('submit', async (e) => {
       throw new Error(result.message || 'Form submission failed');
     }
   } catch (err) {
+    if (err && err.name === 'AbortError') err = new Error('Form submission failed');
     console.error('FormSubmit error:', err);
     if (formError) {
       const alertIcon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
