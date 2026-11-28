@@ -376,3 +376,50 @@
   .project-card .project-card-bg-img { transform: none; }
   .cursor-label { display: none; }
 }
+
+/* ---------- Refinement fixes ---------- */
+.nowrap { white-space: nowrap; }
+#why-heading { text-wrap: balance; }
+
+/* Timeline line is an absolute pseudo-element, so lift the numbers above it */
+.steps-grid .step-card .step-num {
+  position: relative;
+  z-index: 1;
+}
+.steps-grid .step-title,
+.steps-grid .step-desc {
+  position: relative;
+  z-index: 1;
+}
+
+/* Gallery: one scroll engine at a time to stop jitter */
+.gallery-track-container {
+  scroll-behavior: auto;
+  overscroll-behavior-x: contain;
+  cursor: grab;
+}
+.gallery-track-container.dragging {
+  scroll-snap-type: none;
+  cursor: grabbing;
+  user-select: none;
+}
+.gallery-track-container.is-animating { scroll-snap-type: none; }
+.gallery-img { -webkit-user-drag: none; user-select: none; }
+.gallery-card,
+.gallery-img { backface-visibility: hidden; transform: translateZ(0); }
+.gallery-card:hover { transform: translate3d(0, -6px, 0); }
+.gallery-card:hover .gallery-img { transform: translateZ(0) scale(1.05); }
+
+/* Reels grid adapts to however many links are configured */
+.reels-grid.reels-count-2 { grid-template-columns: repeat(2, minmax(0, 360px)); justify-content: center; }
+.reels-grid.reels-count-1 { grid-template-columns: minmax(0, 380px); justify-content: center; }
+@media (max-width: 900px) {
+  .reels-grid.reels-count-2 { grid-template-columns: minmax(0, 340px); }
+}
+
+/* Nav links don't fit below ~1100px: switch to the drawer earlier */
+@media (max-width: 1100px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .mobile-nav { display: block; }
+}

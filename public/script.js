@@ -32,7 +32,7 @@ function applyTheme(theme) {
   // Swap navbar monogram between coloured (light) and dark-mode versions
   const navMonogram = document.querySelector('.logo-monogram-img');
   if (navMonogram) {
-    navMonogram.src = isDark ? 'assets/monogram-dark.svg' : 'assets/monogram.svg';
+    navMonogram.src = isDark ? 'assets/monogram-dark.svg' : 'assets/monogram-light.svg';
   }
 }
 
@@ -499,7 +499,7 @@ function initInstagramReels() {
         fallback.style.display = 'flex';
       }
       links.forEach(a => {
-        a.setAttribute('href', rawUrl || 'https://www.instagram.com/emergunfold/');
+        a.setAttribute('href', rawUrl || 'https://www.instagram.com/emerg_jabalpur/');
         a.setAttribute('target', '_blank');
         a.setAttribute('rel', 'noopener noreferrer');
       });
@@ -582,11 +582,56 @@ if (galleryTrack && galleryContainer) {
   let currentIndex = 0;
   const totalSlides = gallerySlides.length;
 
-  const getSlideWidth = () => {
-    if (gallerySlides.length === 0) return 360;
-    const slide = gallerySlides[0];
-    const gap = 24;
-    return slide.getBoundingClientRect().width + gap;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let animFrame = null;
+  let isAnimating = false;
+
+  const targetFor = (index) => {
+    const slide = gallerySlides[index];
+    const contRect = galleryContainer.getBoundingClientRect();
+    const slideRect = slide.getBoundingClientRect();
+    const raw = galleryContainer.scrollLeft + (slideRect.left - contRect.left) - (contRect.width - slideRect.width) / 2;
+    const max = galleryContainer.scrollWidth - galleryContainer.clientWidth;
+    return Math.max(0, Math.min(max, raw));
+  };
+
+  const nearestIndex = () => {
+    const contRect = galleryContainer.getBoundingClientRect();
+    const center = contRect.left + contRect.width / 2;
+    let best = 0;
+    let bestDist = Infinity;
+    gallerySlides.forEach((slide, i) => {
+      const r = slide.getBoundingClientRect();
+      const d = Math.abs(r.left + r.width / 2 - center);
+      if (d < bestDist) { bestDist = d; best = i; }
+    });
+    return best;
+  };
+
+  const animateTo = (target) => {
+    cancelAnimationFrame(animFrame);
+    const start = galleryContainer.scrollLeft;
+    const distance = target - start;
+    if (prefersReducedMotion || Math.abs(distance) < 1) {
+      galleryContainer.scrollLeft = target;
+      return;
+    }
+    const duration = Math.min(900, 420 + Math.abs(distance) * 0.35);
+    const startTime = performance.now();
+    isAnimating = true;
+    galleryContainer.classList.add('is-animating');
+    const ease = (t) => 1 - Math.pow(1 - t, 4);
+    const step = (now) => {
+      const t = Math.min(1, (now - startTime) / duration);
+      galleryContainer.scrollLeft = start + distance * ease(t);
+      if (t < 1) {
+        animFrame = requestAnimationFrame(step);
+      } else {
+        isAnimating = false;
+        galleryContainer.classList.remove('is-animating');
+      }
+    };
+    animFrame = requestAnimationFrame(step);
   };
 
   const updateDots = (index) => {
@@ -601,11 +646,7 @@ if (galleryTrack && galleryContainer) {
     if (index >= totalSlides) index = 0;
     currentIndex = index;
 
-    const targetScroll = currentIndex * getSlideWidth();
-    galleryContainer.scrollTo({
-      left: targetScroll,
-      behavior: 'smooth'
-    });
+    animateTo(targetFor(currentIndex));
     updateDots(currentIndex);
   };
 
@@ -631,56 +672,68 @@ if (galleryTrack && galleryContainer) {
   // Track scroll position to update dots during manual touch/drag scroll
   let scrollTimeout;
   galleryContainer.addEventListener('scroll', () => {
+    if (isAnimating) return;
     clearTimeout(scrollTimeout);
     scrollTimeout = setTimeout(() => {
-      const scrollPos = galleryContainer.scrollLeft;
-      const slideW = getSlideWidth();
-      const detectedIndex = Math.round(scrollPos / slideW);
-      if (detectedIndex >= 0 && detectedIndex < totalSlides) {
-        currentIndex = detectedIndex;
-        updateDots(currentIndex);
-      }
-    }, 60);
+      currentIndex = nearestIndex();
+      updateDots(currentIndex);
+    }, 80);
   }, { passive: true });
 
-  // Auto-advance every 5 seconds, pauses on hover
-  let autoAdvanceTimer = setInterval(() => {
-    scrollToIndex(currentIndex + 1);
-  }, 5000);
+  // Auto-advance every 5 seconds; pauses on hover, touch, or when off-screen
+  let autoAdvanceTimer = null;
+  let galleryVisible = false;
+  let galleryHovered = false;
+  const stopAuto = () => { clearInterval(autoAdvanceTimer); autoAdvanceTimer = null; };
+  const startAuto = () => {
+    stopAuto();
+    if (prefersReducedMotion || !galleryVisible || galleryHovered) return;
+    autoAdvanceTimer = setInterval(() => scrollToIndex(currentIndex + 1), 5000);
+  };
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((entries) => {
+      galleryVisible = entries[0].isIntersecting;
+      startAuto();
+    }, { threshold: 0.35 }).observe(galleryContainer);
+  }
 
   const carouselWrap = document.querySelector('.gallery-carousel-wrap');
   if (carouselWrap) {
-    carouselWrap.addEventListener('mouseenter', () => {
-      clearInterval(autoAdvanceTimer);
-    });
-    carouselWrap.addEventListener('mouseleave', () => {
-      autoAdvanceTimer = setInterval(() => {
-        scrollToIndex(currentIndex + 1);
-      }, 5000);
-    });
+    carouselWrap.addEventListener('mouseenter', () => { galleryHovered = true; stopAuto(); });
+    carouselWrap.addEventListener('mouseleave', () => { galleryHovered = false; startAuto(); });
+    carouselWrap.addEventListener('touchstart', () => { cancelAnimationFrame(animFrame); isAnimating = false; galleryContainer.classList.remove('is-animating'); stopAuto(); }, { passive: true });
+    carouselWrap.addEventListener('touchend', () => setTimeout(startAuto, 1500), { passive: true });
   }
+  document.addEventListener('visibilitychange', () => (document.hidden ? stopAuto() : startAuto()));
+  window.addEventListener('resize', () => {
+    galleryContainer.scrollLeft = targetFor(currentIndex);
+  }, { passive: true });
 
   // Mouse Drag-to-Scroll for desktop users
   let isDown = false;
   let startX;
   let scrollLeft;
 
+  const endDrag = () => {
+    if (!isDown) return;
+    isDown = false;
+    galleryContainer.classList.remove('dragging');
+    scrollToIndex(nearestIndex());
+  };
+
   galleryContainer.addEventListener('mousedown', (e) => {
+    cancelAnimationFrame(animFrame);
+    isAnimating = false;
+    galleryContainer.classList.remove('is-animating');
     isDown = true;
     galleryContainer.classList.add('dragging');
     startX = e.pageX - galleryContainer.offsetLeft;
     scrollLeft = galleryContainer.scrollLeft;
   });
 
-  galleryContainer.addEventListener('mouseleave', () => {
-    isDown = false;
-    galleryContainer.classList.remove('dragging');
-  });
-
-  galleryContainer.addEventListener('mouseup', () => {
-    isDown = false;
-    galleryContainer.classList.remove('dragging');
-  });
+  galleryContainer.addEventListener('mouseleave', endDrag);
+  galleryContainer.addEventListener('mouseup', endDrag);
 
   galleryContainer.addEventListener('mousemove', (e) => {
     if (!isDown) return;
