@@ -381,16 +381,28 @@
 .nowrap { white-space: nowrap; }
 #why-heading { text-wrap: balance; }
 
-/* Timeline line is an absolute pseudo-element, so lift the numbers above it */
+/* Reveal transforms make each card its own stacking context, so the
+   card itself (not just .step-num) must sit above the grid's line. */
+.steps-grid::before,
+.steps-grid::after { z-index: 0; }
+.steps-grid > .step-card {
+  position: relative;
+  z-index: 1;
+}
 .steps-grid .step-card .step-num {
   position: relative;
-  z-index: 1;
+  box-shadow: 0 0 0 6px var(--bg-primary);
 }
-.steps-grid .step-title,
-.steps-grid .step-desc {
-  position: relative;
-  z-index: 1;
-}
+.steps-grid::after { background: var(--accent-warm); }
+.steps-grid .step-card.is-active .step-num { border-color: var(--accent-warm); }
+
+/* Warm accent (Burnt Terracotta / Deep Rust) — used sparingly */
+.gradient-text,
+[data-theme="dark"] .gradient-text { color: var(--accent-warm); }
+[data-theme="light"] .gradient-text { color: var(--accent-warm-deep); }
+.nav-link::after { background: var(--accent-warm); }
+:focus-visible { outline-color: var(--accent-warm); }
+::selection { background: var(--accent-warm); color: #FAF8F6; }
 
 /* Gallery: one scroll engine at a time to stop jitter */
 .gallery-track-container {

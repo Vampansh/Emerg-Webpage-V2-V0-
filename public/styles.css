@@ -26,6 +26,8 @@
   --accent-btn-text:  #3D2C2E;
   --accent-secondary: #886F68;
   --lavender:         #D1CCDC;
+  --accent-warm:      #BC4E30;
+  --accent-warm-deep: #9E3E24;
   --border-subtle:    rgba(209, 204, 220, 0.18);
   --border-strong:    rgba(209, 204, 220, 0.35);
   --shadow-sm:        0 4px 16px rgba(0, 0, 0, 0.35);
@@ -39,16 +41,18 @@
 [data-theme="light"] {
   --font-family:      'Montserrat', sans-serif;
   --bg-primary:       #FFFFFF;
-  --bg-secondary:     #F6F4F5;
+  --bg-secondary:     #FAF8F6;
   --bg-card:          #FFFFFF;
-  --bg-card-hover:    #FAF8F9;
+  --bg-card-hover:    #FAF8F6;
   --text-primary:     #3D2C2E;
-  --text-secondary:   #424C55;
+  --text-secondary:   #614C46;
   --text-muted:       #886F68;
   --accent-primary:   #3D2C2E;
   --accent-btn-text:  #FFFFFF;
   --accent-secondary: #886F68;
   --lavender:         #D1CCDC;
+  --accent-warm:      #BC4E30;
+  --accent-warm-deep: #9E3E24;
   --border-subtle:    rgba(61, 44, 46, 0.14);
   --border-strong:    rgba(61, 44, 46, 0.28);
   --shadow-sm:        0 4px 14px rgba(61, 44, 46, 0.06);
