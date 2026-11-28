@@ -1,0 +1,378 @@
+/* ============================================================
+   EMERG - Editorial layout layer
+   Brand colours and Montserrat are untouched. This file only
+   changes structure and motion so each section has its own
+   rhythm instead of repeating one card pattern.
+   ============================================================ */
+
+/* ---------- Reveals: crisp travel, no blur ---------- */
+.reveal {
+  filter: none;
+  transform: translate3d(0, 28px, 0);
+  transition: opacity 0.9s var(--ease-out-expo),
+              transform 1s var(--ease-out-expo),
+              background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ---------- About: tighter heading-to-copy rhythm ---------- */
+.about-story .section-header { margin-bottom: 32px; }
+
+/* ---------- Services: editorial index ---------- */
+#services .section-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: 64px;
+  align-items: end;
+  text-align: left;
+}
+#services .section-header .eyebrow { grid-column: 1 / -1; justify-self: start; }
+#services .section-header .eyebrow::after { display: none; }
+#services .section-header .section-subtitle {
+  margin: 0;
+  max-width: 520px;
+  justify-self: end;
+}
+
+.services-grid {
+  grid-template-columns: 1fr;
+  gap: 0;
+  counter-reset: service;
+  border-top: 1px solid var(--border-strong);
+}
+
+.service-card {
+  counter-increment: service;
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1.05fr) minmax(0, 1fr);
+  grid-template-areas:
+    "icon name desc"
+    "icon name list";
+  column-gap: 48px;
+  row-gap: 22px;
+  align-items: start;
+  padding: 48px 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--border-subtle);
+  border-radius: 0;
+  overflow: visible;
+}
+.service-card::before,
+.service-card::after { display: none; }
+
+.service-card.visible:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--border-strong);
+}
+
+.service-icon-wrap {
+  grid-area: icon;
+  border-radius: 50%;
+  background: transparent;
+  transition: background-color 0.5s var(--ease-out-expo), transform 0.7s var(--ease-out-expo);
+}
+.service-card:hover .service-icon-wrap { transform: rotate(-8deg); }
+
+.service-name {
+  grid-area: name;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: clamp(1.9rem, 3.3vw, 2.9rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  transition: transform 0.7s var(--ease-out-expo);
+}
+.service-name::before {
+  content: counter(service, decimal-leading-zero);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--accent-secondary);
+}
+.service-card:hover .service-name { transform: translate3d(14px, 0, 0); }
+
+.service-desc {
+  grid-area: desc;
+  font-size: 1.02rem;
+  padding-top: 26px;
+  text-wrap: pretty;
+}
+
+.service-deliverables {
+  grid-area: list;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 0;
+}
+.deliverable {
+  padding: 7px 14px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  transition: border-color 0.4s ease, color 0.4s ease;
+}
+.deliverable::before { display: none; }
+.service-card:hover .deliverable {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+/* ---------- How we work: scroll-drawn timeline ---------- */
+.steps-grid {
+  position: relative;
+  gap: 0;
+  margin-bottom: 56px;
+}
+.steps-grid::before,
+.steps-grid::after {
+  content: '';
+  position: absolute;
+  top: 21px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border-subtle);
+}
+.steps-grid::after {
+  background: var(--accent-primary);
+  transform-origin: 0 50%;
+  transform: scaleX(var(--steps-progress, 0));
+}
+
+.step-card {
+  padding: 0 28px 0 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+.step-card::before { display: none; }
+.step-card.visible:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.steps-grid .step-card .step-num {
+  border-radius: 50%;
+  margin-bottom: 26px;
+  background: var(--bg-primary);
+  border-color: var(--border-strong);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  transition: background-color 0.6s var(--ease-out-expo), color 0.6s var(--ease-out-expo),
+              border-color 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
+}
+.steps-grid .step-card.is-active .step-num {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: var(--accent-btn-text);
+  transform: scale(1.08);
+}
+
+.step-title,
+.step-desc {
+  opacity: 0.45;
+  transition: opacity 0.7s var(--ease-out-expo);
+}
+.step-card.is-active .step-title,
+.step-card.is-active .step-desc { opacity: 1; }
+
+.steps-tagline,
+[data-theme="dark"] .steps-tagline {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+/* ---------- Why EMERG: ledger columns ---------- */
+.why-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid var(--border-strong);
+}
+.why-card {
+  flex-direction: column;
+  gap: 44px;
+  padding: 32px 26px 8px;
+  background: transparent;
+  border: 0;
+  border-right: 1px solid var(--border-subtle);
+  border-radius: 0;
+}
+.why-card:first-child { padding-left: 0; }
+.why-card:last-child { padding-right: 0; border-right: 0; }
+.why-card::before { display: none; }
+.why-card.visible:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--border-subtle);
+}
+
+.why-icon {
+  width: auto;
+  height: auto;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  transition: transform 0.7s var(--ease-out-expo);
+}
+.why-icon svg {
+  width: 30px;
+  height: 30px;
+  stroke-width: 1.4;
+}
+.why-card:hover .why-icon { transform: translate3d(0, -6px, 0); }
+.why-content h4 { font-size: 1.08rem; line-height: 1.3; }
+
+/* ---------- Work: image settles as the card arrives ---------- */
+.project-card .project-card-bg-img { transform: scale(1.14); }
+.project-card.visible .project-card-bg-img { transform: scale(1); }
+.project-card.visible:hover .project-card-bg-img { transform: scale(1.06); }
+
+.cursor-label {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1500;
+  width: 84px;
+  height: 84px;
+  margin: -42px 0 0 -42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  color: var(--accent-btn-text);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate3d(var(--cx, 0px), var(--cy, 0px), 0);
+  scale: 0.3;
+  transition: opacity 0.35s ease, scale 0.5s var(--ease-out-expo);
+}
+.cursor-label.is-on { opacity: 1; scale: 1; }
+
+/* ---------- Contact: headline parity + hairline details ---------- */
+.contact-intro {
+  font-size: clamp(2.1rem, 4.4vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.032em;
+  text-wrap: balance;
+}
+.contact-details {
+  gap: 0;
+  border-top: 1px solid var(--border-subtle);
+}
+.contact-item {
+  padding: 20px 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--border-subtle);
+  border-radius: 0;
+}
+.contact-item:hover { border-color: var(--border-strong); }
+.contact-item-icon { background: transparent; width: 28px; }
+.contact-item-value { font-size: 1.05rem; }
+
+/* ---------- Footer: oversized outlined wordmark ---------- */
+.footer-wordmark {
+  margin: 56px 0 20px;
+  font-size: clamp(3.6rem, 17.5vw, 15.5rem);
+  font-weight: 800;
+  line-height: 0.86;
+  letter-spacing: -0.02em;
+  text-align: center;
+  white-space: nowrap;
+  color: rgba(245, 237, 240, 0.07);
+  user-select: none;
+  overflow: hidden;
+}
+.footer-wordmark span {
+  display: inline-block;
+  transform: translate3d(0, 60%, 0);
+  opacity: 0;
+  transition: transform 1.4s var(--ease-out-expo), opacity 1s ease;
+  transition-delay: calc(var(--li, 0) * 70ms);
+}
+.footer-wordmark.is-in span { transform: none; opacity: 1; }
+
+/* ---------- Tablet ---------- */
+@media (max-width: 1080px) {
+  .steps-grid { grid-template-columns: 1fr; }
+  .steps-grid::before,
+  .steps-grid::after {
+    top: 0;
+    bottom: 0;
+    left: 21px;
+    right: auto;
+    width: 1px;
+    height: auto;
+  }
+  .steps-grid::after {
+    transform-origin: 50% 0;
+    transform: scaleY(var(--steps-progress, 0));
+  }
+  .step-card {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr);
+    column-gap: 24px;
+    row-gap: 6px;
+    padding: 0 0 36px;
+  }
+  .step-card:last-child { padding-bottom: 0; }
+  .steps-grid .step-card .step-num { grid-row: 1 / span 2; margin-bottom: 0; }
+  .step-title { padding-top: 6px; }
+
+  .why-grid { grid-template-columns: 1fr 1fr; column-gap: 40px; }
+  .why-card,
+  .why-card:first-child,
+  .why-card:last-child {
+    flex-direction: row;
+    gap: 20px;
+    padding: 28px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+}
+
+@media (max-width: 900px) {
+  #services .section-header { grid-template-columns: 1fr; row-gap: 4px; }
+  #services .section-header .section-subtitle { justify-self: start; margin-top: 16px; }
+
+  .service-card {
+    grid-template-columns: 56px minmax(0, 1fr);
+    grid-template-areas:
+      "icon name"
+      "desc desc"
+      "list list";
+    column-gap: 20px;
+    row-gap: 18px;
+    align-items: center;
+    padding: 36px 0;
+  }
+  .service-desc { padding-top: 0; }
+  .service-card:hover .service-name { transform: none; }
+}
+
+@media (max-width: 768px) {
+  .reveal { transform: translate3d(0, 20px, 0); }
+  .why-grid { grid-template-columns: 1fr; }
+  .footer-wordmark { margin-top: 40px; }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .steps-grid::after { transform: none; }
+  .step-title,
+  .step-desc { opacity: 1; }
+  .footer-wordmark span { transform: none; opacity: 1; transition: none; }
+  .project-card .project-card-bg-img { transform: none; }
+  .cursor-label { display: none; }
+}
